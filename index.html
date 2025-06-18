@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Fauzan & Meta</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <!-- CSS Styles -->
+    <style>
+        :root {
+            /* Palet Warna Elegan Abu-abu Terang */
+            --primary-color: #BDBDBD; /* Soft Gold / Light Grey Accent */
+            --secondary-color: #2a2a2a; /* Dark Charcoal "Paper" */
+            --accent-color: #E0E0E0; /* Off-white Text */
+            --dark-color: #1C1C1C; /* Main Dark Grey Background */
+            --light-color: #ffffff;
+            --border-color: #4a4a4a; /* Mid-Grey Border */
+            
+            /* Tipografi Modern & Elegan */
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-script: 'Alex Brush', cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--accent-color);
+            line-height: 1.8;
+            font-size: 16px;
+            background-color: var(--dark-color);
+            padding-bottom: 80px;
+        }
+        
+        body.cover-active, body.lightbox-active {
+            overflow: hidden;
+        }
+        
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+            background-color: var(--secondary-color);
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 0 20px;
+        }
+        
+        /* --- STYLES FOR COVER PAGE --- */
+        #cover-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+            flex-direction: column;
+            transition: opacity 1.5s ease;
+        }
+
+        #cover-page.opening {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .cover-content h1 {
+            font-family: var(--font-script);
+            font-size: 5rem;
+            font-weight: 400;
+            margin: 15px 0;
+            line-height: 1.2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            color: var(--light-color);
+        }
+        
+        .cover-date-location {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        /* --- STYLES FOR SCROLL ANIMATION --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section {
+            padding: 150px 0; /* UPDATED: Increased padding for more space */
+            text-align: center;
+            position: relative;
+            background-color: transparent;
+        }
+        
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            margin-bottom: 35px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* --- Music & Nav --- */
+        #music-control {
+            position: fixed; bottom: 90px; left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 50px; height: 50px;
+            background-color: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            color: var(--light-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease 1.5s, background-color 0.3s;
+        }
+        #music-control.show { transform: translateX(-50%) scale(1); }
+        #music-control:hover { background-color: var(--primary-color); }
+
+        #bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: rgba(28, 28, 28, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.2);
+            display: flex; justify-content: space-around;
+            padding: 10px 0; z-index: 1000;
+            transform: translateY(100%); transition: transform 0.5s ease;
+            border-top: 1px solid var(--border-color);
+        }
+        #bottom-nav.show { transform: translateY(0); }
+        #bottom-nav a {
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: var(--accent-color);
+            opacity: 0.7; font-size: 0.7rem; font-weight: 600;
+            transition: color 0.3s, opacity 0.3s;
+        }
+        #bottom-nav a i { font-size: 1.4rem; margin-bottom: 5px; }
+        #bottom-nav a.active, #bottom-nav a:hover { color: var(--primary-color); opacity: 1; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://i.imgur.com/qRXtgAq.jpeg') no-repeat center center/cover;
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            text-align: center; color: var(--light-color); position: relative;
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 250px; background: linear-gradient(to top, var(--secondary-color), transparent);
+        }
+        .hero-content { position: relative; z-index: 2; }
+        .hero-content h1 {
+            font-family: var(--font-script); font-weight: 400; font-size: 6rem;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+        }
+        
+        /* Mempelai Section */
+        .bride-groom-wrapper { display: flex; flex-direction: column; gap: 0; margin-top: 50px; }
+        .ampersand-divider {
+            font-family: var(--font-script); font-size: 6rem; color: var(--primary-color);
+            margin: 40px 0; font-weight: 400;
+        }
+        .mempelai-block { display: flex; align-items: center; gap: 50px; text-align: left; }
+        .mempelai-block.reverse { flex-direction: row-reverse; text-align: right; }
+        .mempelai-photo { flex: 1; }
+        .mempelai-photo img { width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .mempelai-info { flex: 1.2; }
+        .mempelai-info .nickname {
+            font-family: var(--font-script); font-size: 4rem;
+            color: var(--primary-color); font-weight: 400; line-height: 1;
+        }
+        .mempelai-info .fullname { font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; }
+        .mempelai-info .parents-info { font-size: 1.1rem; opacity: 0.8; }
+        .mempelai-info .address { font-size: 1rem; font-style: italic; margin-top: 15px; opacity: 0.7; }
+        .mempelai-info .social-icon { margin-top: 20px; font-size: 1.5rem; }
+        .mempelai-info .social-icon a { color: var(--primary-color); text-decoration: none; transition: color 0.3s; }
+        .mempelai-info .social-icon a:hover { color: var(--accent-color); }
+        
+        /* Acara Section */
+        .date-display {
+            display: flex; align-items: center; justify-content: center;
+            gap: 20px; margin: 40px 0; text-transform: uppercase; font-weight: 600;
+        }
+        .date-display span { font-family: var(--font-heading); font-size: 5rem; color: var(--primary-color); }
+        .date-display .month, .date-display .year { flex: 1; text-align: right; }
+        .date-display .year { text-align: left; }
+        .date-divider { height: 1px; background: var(--border-color); flex: 1; }
+        .event-time, .event-location { margin-top: 20px; }
+        .event-time h4, .event-location h4 {
+            text-transform: uppercase; font-size: 1rem; letter-spacing: 2px;
+            color: var(--primary-color); margin-bottom: 5px;
+        }
+        .event-time p, .event-location p { font-size: 1.2rem; font-style: italic; }
+        .map-container { margin-top: 40px; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; }
+
+        /* Dynamic Scrolling Gallery */
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .scrolling-gallery { width: 100%; overflow: hidden; margin-top: 40px; }
+        .scrolling-gallery-track {
+            display: flex;
+            width: calc((450px + 20px) * 8);
+            animation: scroll-left 25s linear infinite;
+        }
+        .scrolling-gallery-track img {
+            width: 450px;
+            height: 600px;
+            object-fit: cover; margin: 0 10px; border-radius: 4px; cursor: pointer;
+        }
+
+        /* Button Styles */
+        .btn, #guestbook-form button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 14px 35px;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .btn:hover, #guestbook-form button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--dark-color);
+            transform: translateY(-2px);
+        }
+        
+        #open-invitation {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--light-color);
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 1rem;
+            text-transform: none;
+            font-weight: 600;
+        }
+        #open-invitation:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .btn-link {
+            background: none; border: none;
+            color: var(--primary-color); text-decoration: underline;
+            font-size: 1rem; cursor: pointer; padding: 10px;
+            margin-top: 40px;
+        }
+        .btn-link:hover {
+            color: var(--accent-color);
+        }
+
+        /* NEW/UPDATED: Lokasi Action Buttons */
+        .action-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: transparent;
+            color: var(--primary-color);
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex-grow: 1;
+            min-width: 200px; /* Ensures buttons don't get too small */
+        }
+        .action-btn i {
+            font-size: 1.1rem;
+        }
+        .action-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+
+        /* Wedding Gift Card Section */
+        .gift-card-wrapper {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 30px; margin-top: 40px;
+        }
+        .gift-card {
+            background: linear-gradient(145deg, #333333, #222222);
+            color: var(--accent-color);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .gift-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+        }
+        .gift-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .gift-card-header .bank-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .gift-card-header .bank-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            opacity: 0.7;
+        }
+        .gift-card-body p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+        .gift-card-body .account-number {
+            font-size: 1.8rem;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+            color: var(--light-color);
+            margin: 5px 0 20px 0;
+        }
+        .gift-card-body .account-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .btn-copy {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 100%;
+            margin-top: 30px;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+
+        /* Guestbook Section */
+        #guestbook-form, .protocol-list { max-width: 700px; margin: 40px auto; }
+        #guestbook-form input, #guestbook-form textarea {
+            width: 100%; padding: 15px; border-radius: 2px;
+            border: 1px solid var(--border-color);
+            font-family: var(--font-body); font-size: 1rem;
+            background-color: rgba(0,0,0,0.1); color: var(--accent-color);
+            transition: border-color 0.3s;
+        }
+        #guestbook-form input:focus, #guestbook-form textarea:focus { outline: none; border-color: var(--primary-color); }
+        #guestbook-messages { max-width: 700px; margin: 50px auto 0; text-align: left; }
+        .guestbook-entry { background: rgba(0,0,0,0.1); padding: 25px; border-radius: 2px; margin-bottom: 15px; border-left: 3px solid var(--primary-color); }
+        .guestbook-entry h4 { font-family: var(--font-heading); font-weight: 700; color: var(--primary-color); }
+        
+        /* Love Story Timeline */
+        .timeline { position: relative; max-width: 700px; margin: 50px auto; padding: 20px 0; }
+        .timeline-item { position: relative; padding-bottom: 40px; padding-left: 40px; text-align: left; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: 0; top: 5px; width: 15px; height: 15px;
+            background-color: var(--secondary-color); border: 3px solid var(--primary-color); border-radius: 50%; z-index: 1;
+        }
+        .timeline-item::after {
+            content: ''; position: absolute; left: 6px; top: 20px; bottom: 0;
+            width: 1px; background-color: var(--border-color);
+        }
+        .timeline-item:last-child::after { display: none; }
+        .timeline-content h3 { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 5px; color: var(--accent-color); }
+
+        /* Photo Gallery Lightbox */
+        #lightbox {
+            position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(18, 18, 18, 0.95); display: none;
+            justify-content: center; align-items: center;
+        }
+        #lightbox.active { display: flex; }
+        #lightbox img { max-width: 90%; max-height: 85%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        #lightbox .close-btn { position: absolute; top: 30px; right: 40px; color: var(--light-color); font-size: 45px; cursor: pointer; }
+
+        /* Footer */
+        .footer-section {
+            padding: 100px 20px;
+        }
+        .footer-section h3 {
+            font-family: var(--font-script);
+            font-size: 3rem;
+            color: var(--primary-color);
+            font-weight: 400;
+        }
+        
+    </style>
+</head>
+<body class="cover-active">
+
+    <!-- Halaman Pembuka (Cover) -->
+    <div id="cover-page" style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.imgur.com/yaKPqEB.jpeg') no-repeat center center/cover;">
+        <div class="cover-content">
+            <p class="intro-text">We invite you to celebrate our wedding</p>
+            <h1>Fauzan & Meta</h1>
+            <div class="cover-date-location">
+                <p>Minggu, 18 Januari 2026</p>
+            </div>
+            <div id="guest-name-container" style="margin-bottom: 30px; font-size: 1rem;">
+                <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                <h3 id="guest-name-cover" style="font-size: 1.5rem; font-weight: 700; margin-top: 5px;">Tamu Undangan</h3>
+            </div>
+            <button id="open-invitation" class="btn">Buka Undangan</button>
+        </div>
+    </div>
+    
+    <!-- Konten Utama Undangan -->
+    <div id="main-content">
+        <div id="music-control">
+            <i class="fas fa-play"></i>
+        </div>
+        <audio id="background-music" src="https://firebasestorage.googleapis.com/v0/b/canvas-testing-389300.appspot.com/o/music%2Fcinematic-documentary.mp3?alt=media&token=e9f47181-34a4-44b2-9382-7f287e07672e" loop></audio>
+
+        <header class="hero section">
+            <div class="hero-content">
+                <h1>Fauzan & Meta</h1>
+                <p class="date">Minggu, 18 Januari 2026</p>
+                <p class="hero-location">Gedung Serbaguna, Sleman</p>
+            </div>
+        </header>
+
+        <section id="quote" class="section reveal">
+            <div class="container">
+                <div class="quote-block">
+                    <p>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."</p>
+                    <span class="source">QS. Ar-Rum: 21</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="mempelai" class="section reveal">
+            <div class="container">
+                <h2>Mempelai</h2>
+                <div class="bride-groom-wrapper">
+                    <!-- Mempelai Pria -->
+                    <div class="mempelai-block">
+                        <div class="mempelai-photo reveal">
+                                <img src="https://plus.unsplash.com/premium_photo-1661328065408-c6738b9a66b1?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto Fauzan">
+                        </div>
+                        <div class="mempelai-info reveal">
+                            <h3 class="nickname">Fauzan</h3>
+                            <p class="fullname">Fauzan</p>
+                            <p class="parents-info">
+                                Putra dari Pasangan <br>
+                                <strong>Bapak Udin Wahyudin</strong> & <strong>Ibu Suwarti</strong>
+                            </p>
+                            <p class="address">Yogyakarta</p>
+                            <div class="social-icon">
+                                <a href="https://www.instagram.com/fauzanpam/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ampersand-divider reveal">&</div>
+
+                    <!-- Mempelai Wanita -->
+                        <div class="mempelai-block reverse">
+                        <div class="mempelai-photo reveal">
+                                <img src="https://images.unsplash.com/photo-1647030304642-7c3b875b7fdd?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Foto Meta">
+                        </div>
+                        <div class="mempelai-info reveal">
+                            <h3 class="nickname">Meta</h3>
+                            <p class="fullname">Meta Nicvia Caecaria Klananda</p>
+                                <p class="parents-info">
+                                Putri dari Pasangan <br>
+                                <strong>Bapak Slamet Rohyani</strong> & <strong>Ibu Ngatiyah</strong>
+                            </p>
+                            <p class="address">Sleman</p>
+                            <div class="social-icon">
+                                <a href="https://www.instagram.com/mnicvia/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="acara" class="section reveal">
+            <div class="container">
+                <h2 class="reveal">Save The Date</h2>
+                <p>Dengan kerendahan hati kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri resepsi pernikahan kami</p>
+                <div class="date-display reveal">
+                    <div class="month">Januari</div>
+                    <div class="date-divider"></div>
+                    <span>18</span>
+                    <div class="date-divider"></div>
+                    <div class="year">2026</div>
+                </div>
+                
+                <div class="event-time reveal">
+                    <h4>Pukul</h4>
+                    <p>10:00 WIB - Selesai</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="lokasi" class="section reveal">
+            <div class="container">
+                <h2 class="reveal">Lokasi Acara</h2>
+                <div class="event-location reveal">
+                        <p>Gedung Serbaguna, Sleman</p>
+                </div>
+
+                <!-- UPDATED: Action Buttons Container -->
+                <div class="action-buttons-container reveal">
+                    <a href="https://www.google.com/maps/place/Stadion+Maguwoharjo+Sleman/@-7.7203545,110.3839045,13.48z/data=!4m15!1m8!3m7!1s0x2e7a5ee1c5671249:0x3027a76e352bc20!2sKabupaten+Sleman,+Daerah+Istimewa+Yogyakarta!3b1!8m2!3d-7.7325213!4d110.402376!16s%2Fg%2F11b_2jgvc4!3m5!1s0x2e7a5978ee5b8fa9:0xc3076270c6af50af!2sStadion%20Maguwoharjo%20Sleman!5e0!3m2!1sen!2sid!4v1684318854746!5m2!1sen!2sid" target="_blank" class="action-btn">
+                        <i class="fas fa-map-marked-alt"></i> Petunjuk Arah
+                    </a>
+                    <a href="#" id="google-calendar-btn" target="_blank" class="action-btn">
+                        <i class="fab fa-google"></i> Google Calendar
+                    </a>
+                    <a href="#" id="apple-calendar-btn" class="action-btn">
+                       <i class="fab fa-apple"></i> Apple Calendar
+                    </a>
+                </div>
+
+                <div class="map-container reveal">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126514.8872958285!2d110.3839045!3d-7.7203545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5978ee5b8fa9%3A0xc3076270c6af50af!2sStadion%20Maguwoharjo%20Sleman!5e0!3m2!1sen!2sid!4v1684318854746!5m2!1sen!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="section reveal">
+            <div class="container">
+                <h2 class="reveal">Our Moments</h2>
+                <div class="scrolling-gallery">
+                    <div class="scrolling-gallery-track">
+                        <!-- Gambar Asli -->
+                        <img src="https://i.imgur.com/MMqFnxP.jpeg" alt="Foto Galeri 1">
+                        <img src="https://i.imgur.com/yGs3Y22.jpeg" alt="Foto Galeri 2">
+                        <img src="https://i.imgur.com/QG4zNce.jpeg" alt="Foto Galeri 3">
+                        <img src="https://i.imgur.com/IjfJrqI.jpeg" alt="Foto Galeri 4">
+                        <!-- Duplikasi untuk loop -->
+                        <img src="https://i.imgur.com/MMqFnxP.jpeg" alt="Foto Galeri 1">
+                        <img src="https://i.imgur.com/yGs3Y22.jpeg" alt="Foto Galeri 2">
+                        <img src="https://i.imgur.com/QG4zNce.jpeg" alt="Foto Galeri 3">
+                        <img src="https://i.imgur.com/IjfJrqI.jpeg" alt="Foto Galeri 4">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="amplop" class="section reveal">
+            <div class="container">
+                <h2 class="reveal">Wedding Gift</h2>
+                <p class="reveal">Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Jika ingin memberikan tanda kasih, dapat melalui cara berikut:</p>
+                <div class="gift-card-wrapper">
+                    <!-- Gift Card BCA -->
+                    <div class="gift-card reveal">
+                        <div class="gift-card-header">
+                            <span class="bank-name">Bank BCA</span>
+                            <span class="bank-logo">BCA</span>
+                        </div>
+                        <div class="gift-card-body">
+                            <p>Nomor Rekening</p>
+                            <p class="account-number" id="rekening-bca">1234567890</p>
+                            <p>Atas Nama</p>
+                            <p class="account-name">Fauzan</p>
+                        </div>
+                        <button class="btn-copy" data-rekening="rekening-bca"><i class="fas fa-copy"></i> Salin Nomor</button>
+                    </div>
+                        <!-- Gift Card Mandiri -->
+                    <div class="gift-card reveal">
+                        <div class="gift-card-header">
+                            <span class="bank-name">Bank Mandiri</span>
+                            <span class="bank-logo">Mandiri</span>
+                        </div>
+                        <div class="gift-card-body">
+                            <p>Nomor Rekening</p>
+                            <p class="account-number" id="rekening-mandiri">0987654321</p>
+                            <p>Atas Nama</p>
+                            <p class="account-name">Meta Nicvia C. K.</p>
+                        </div>
+                        <button class="btn-copy" data-rekening="rekening-mandiri"><i class="fas fa-copy"></i> Salin Nomor</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="rsvp" class="section reveal">
+            <div class="container">
+                    <h2 class="reveal">RSVP</h2>
+                    <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda berkenan hadir.</p>
+                    <a id="rsvp-btn" href="#" target="_blank" class="btn">Konfirmasi Kehadiran</a>
+            </div>
+        </section>
+
+        <section id="guestbook" class="section reveal">
+            <div class="container">
+                <h2 class="reveal">Ucapan & Doa</h2>
+                <form id="guestbook-form" class="reveal" style="transition-delay: 0.4s;">
+                    <input type="text" id="guestbook-name" placeholder="Nama Anda" required>
+                    <textarea id="guestbook-message" placeholder="Tulis ucapan dan doa Anda di sini..." rows="4" required></textarea>
+                    <button type="submit" class="btn">Kirim Ucapan</button>
+                </form>
+                <div id="guestbook-messages" class="reveal" style="transition-delay: 0.5s;"></div>
+            </div>
+        </section>
+
+        <footer class="footer-section section reveal">
+            <div class="container">
+                <p>Atas kehadiran dan doa restunya, kami mengucapkan terima kasih.</p>
+                <h3>Fauzan & Meta</h3>
+                    <p style="margin-top: 20px; font-size: 0.8rem;">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="lightbox">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
+    <!-- UPDATED: Navigation Menu HTML -->
+    <nav id="bottom-nav">
+        <a href="#hero" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#mempelai"><i class="fas fa-heart"></i><span>Mempelai</span></a>
+        <a href="#acara"><i class="fas fa-calendar-check"></i><span>Acara</span></a>
+        <a href="#gallery"><i class="fas fa-images"></i><span>Galeri</span></a>
+        <a href="#amplop"><i class="fas fa-gift"></i><span>Hadiah</span></a>
+        <a href="#guestbook"><i class="fas fa-book-open"></i><span>Ucapan</span></a>
+    </nav>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const body = document.body;
+        const coverPage = document.getElementById('cover-page');
+        const openButton = document.getElementById('open-invitation');
+        const mainContent = document.getElementById('main-content');
+        const backgroundMusic = document.getElementById('background-music');
+        const musicControl = document.getElementById('music-control');
+        const bottomNav = document.getElementById('bottom-nav');
+        
+        openButton.addEventListener('click', function() {
+            coverPage.classList.add('opening');
+            mainContent.classList.add('visible');
+            body.classList.remove('cover-active');
+            
+            // Attempt to play music
+            backgroundMusic.play().then(() => {
+                 musicControl.querySelector('i').classList.replace('fa-play', 'fa-pause');
+            }).catch(e => console.log("Autoplay music blocked. User must interact to play."));
+
+            musicControl.classList.add('show');
+            bottomNav.classList.add('show');
+            
+            setTimeout(() => {
+                coverPage.style.display = 'none';
+            }, 1500);
+        });
+
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('#bottom-nav a');
+        // Manually add hero section to be observed
+        const heroSection = document.querySelector('.hero');
+        const allSectionsForNav = [...sections, heroSection];
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let targetId = entry.target.id;
+                    if(entry.target.classList.contains('hero')) {
+                        targetId = 'hero';
+                    }
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        // Use endsWith to correctly match href with section id
+                        if (link.getAttribute('href').endsWith(targetId)) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        allSectionsForNav.forEach(section => {
+            if(section) sectionObserver.observe(section);
+        });
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let guestName = urlParams.get('to');
+        if (guestName) {
+            guestName = guestName.replace(/_/g, ' ');
+            document.getElementById('guest-name-cover').textContent = guestName;
+            document.getElementById('guestbook-name').value = guestName;
+        } else {
+             document.getElementById('guest-name-container').style.display = 'none';
+             guestName = "Tamu Undangan";
+        }
+        
+        const rsvpButton = document.getElementById('rsvp-btn');
+        const phoneNumber = "6281234567890"; // Ganti dengan nomor WhatsApp Anda
+        const prefilledMessage = encodeURIComponent(`Halo, saya ${guestName}, ingin mengonfirmasi kehadiran di pernikahan Fauzan & Meta.`);
+        rsvpButton.href = `https://wa.me/${phoneNumber}?text=${prefilledMessage}`;
+
+        musicControl.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                icon.classList.replace('fa-play', 'fa-pause');
+            } else {
+                backgroundMusic.pause();
+                icon.classList.replace('fa-pause', 'fa-play');
+            }
+        });
+
+        document.querySelectorAll('.btn-copy').forEach(button => {
+            button.addEventListener('click', function() {
+                const rekeningId = this.getAttribute('data-rekening');
+                const textToCopy = document.getElementById(rekeningId).innerText;
+                
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopySuccess(this);
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        });
+        
+        function showCopySuccess(button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+            button.disabled = true;
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+
+        // --- UPDATED: Calendar Links ---
+        const eventDetails = {
+            title: "Pernikahan Fauzan & Meta",
+            location: "Gedung Serbaguna, Sleman",
+            description: "Hadirilah acara resepsi pernikahan Fauzan & Meta. Terima kasih atas kehadiran dan doa restu Anda.",
+            // Dates are in UTC. 10:00 WIB is 03:00 UTC.
+            startDateUTC: "20260118T030000Z", 
+            endDateUTC: "20260118T060000Z" // Assuming 3 hour event
+        };
+
+        // Google Calendar
+        const googleCalendarLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.startDateUTC}/${eventDetails.endDateUTC}&details=${encodeURIComponent(eventDetails.description)}&location=${encodeURIComponent(eventDetails.location)}`;
+        document.getElementById('google-calendar-btn').href = googleCalendarLink;
+
+        // Apple Calendar (.ics file via data URI)
+        const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+URL:${document.location.href}
+DTSTART:${eventDetails.startDateUTC}
+DTEND:${eventDetails.endDateUTC}
+SUMMARY:${eventDetails.title}
+DESCRIPTION:${eventDetails.description}
+LOCATION:${eventDetails.location}
+END:VEVENT
+END:VCALENDAR`;
+        const appleCalendarLink = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+        const appleBtn = document.getElementById('apple-calendar-btn');
+        appleBtn.href = appleCalendarLink;
+        // To make it download on click
+        appleBtn.setAttribute('download', 'Pernikahan_Fauzan_Meta.ics');
+
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const galleryImages = document.querySelectorAll('.scrolling-gallery-track img');
+        const closeBtn = document.querySelector('#lightbox .close-btn');
+
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.classList.add('active');
+                lightboxImg.src = img.src;
+                body.classList.add('lightbox-active');
+            });
+        });
+
+        const closeLightbox = () => {
+                lightbox.classList.remove('active');
+                body.classList.remove('lightbox-active');
+        };
+
+        closeBtn.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target !== lightboxImg) {
+                closeLightbox();
+            }
+        });
+    });
+    </script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkvJhwyapGRwZX4OrPy7kr7bK6xlYWeUE",
+            authDomain: "undangan-fauzan-meta.firebaseapp.com",
+            projectId: "undangan-fauzan-meta",
+            storageBucket: "undangan-fauzan-meta.appspot.com",
+            messagingSenderId: "481462514985",
+            appId: "1:481462514985:web:68e7eb859e56a69028f338",
+            measurementId: "G-H61KP48GN0"
+        };
+        const appId = 'undangan-fauzan-meta-app';
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        async function initializeGuestbook() {
+            try {
+                await signInAnonymously(auth);
+                const guestbookForm = document.getElementById('guestbook-form');
+                const nameInput = document.getElementById('guestbook-name');
+                const messageInput = document.getElementById('guestbook-message');
+                const messagesContainer = document.getElementById('guestbook-messages');
+                const wishesCollection = collection(db, `/artifacts/${appId}/public/data/wishes`);
+
+                guestbookForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const name = nameInput.value.trim();
+                    const message = messageInput.value.trim();
+                    if (name && message) {
+                        const submitButton = guestbookForm.querySelector('button');
+                        submitButton.disabled = true;
+                        submitButton.textContent = 'Mengirim...';
+                        
+                        await addDoc(wishesCollection, { name, message, createdAt: serverTimestamp() });
+                        
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Kirim Ucapan';
+                        messageInput.value = '';
+                    }
+                });
+                
+                const q = query(wishesCollection, orderBy("createdAt", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    messagesContainer.innerHTML = snapshot.empty ? '<p style="text-align:center; color:#888;">Jadilah yang pertama memberi ucapan!</p>' : '';
+                    snapshot.forEach(doc => {
+                        const wish = doc.data();
+                        const entryDiv = document.createElement('div');
+                        entryDiv.className = 'guestbook-entry';
+                        
+                        // Sanitize HTML content before inserting
+                        const sanitizedName = escapeHTML(wish.name);
+                        const sanitizedMessage = escapeHTML(wish.message).replace(/\n/g, '<br>');
+                        
+                        entryDiv.innerHTML = `<h4>${sanitizedName}</h4><p>${sanitizedMessage}</p><p class="timestamp" style="font-size:0.8rem; color:#999; margin-top:10px;">${wish.createdAt ? new Date(wish.createdAt.toDate()).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short'}) : ''}</p>`;
+                        messagesContainer.appendChild(entryDiv);
+                    });
+                });
+            } catch (error) {
+                console.error("Guestbook initialization failed: ", error);
+                 messagesContainer.innerHTML = '<p style="text-align:center; color:#ff8a80;">Gagal memuat buku tamu. Silakan coba lagi nanti.</p>';
+            }
+        }
+        
+        function escapeHTML(str) {
+            if (!str) return '';
+            const p = document.createElement("p");
+            p.appendChild(document.createTextNode(str));
+            return p.innerHTML;
+        }
+        
+        initializeGuestbook();
+    </script>
+</body>
+</html>
