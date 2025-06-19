@@ -359,7 +359,9 @@
             /* Hitung total lebar: (lebar_item + total margin horizontal per item) * total_item_di_track */
             /* Total item di track = 8 (4 asli + 4 duplikat) */
             width: calc((20rem + 1.25rem) * 8); /* Desktop: (21.25rem * 8) = 170rem */
-            animation: scroll-left 40s linear infinite; /* Menambahkan kembali animasi */
+            animation: scroll-left 40s linear infinite;
+    will-change: transform;
+    transform: translateX(0); /* Menambahkan kembali animasi */
         }
         .scrolling-gallery-track:hover {
             animation-play-state: paused; /* Jeda saat hover */
@@ -1221,5 +1223,20 @@
             }, 3000);
         }
     </script>
+
+<script>
+  // Fallback auto-scroll jika animasi gagal
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.querySelector(".scrolling-gallery-track");
+    if (!track) return;
+
+    let scrollAmount = 0;
+    const step = 0.5; // kecepatan scroll
+    setInterval(() => {
+      scrollAmount -= step;
+      track.style.transform = `translateX(${scrollAmount}px)`;
+    }, 30);
+  });
+</script>
 </body>
 </html>
